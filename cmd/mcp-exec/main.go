@@ -38,10 +38,6 @@ func main() {
 			mcp.Required(),
 			mcp.Description("要执行的完整命令字符串"),
 		),
-		mcp.WithArray("args",
-			mcp.WithStringItems(),
-			mcp.Description("可选：额外参数列表(若使用shell模式通常不需要)"),
-		),
 		mcp.WithObject("env",
 			mcp.Description("可选：环境变量映射"),
 		),
@@ -57,7 +53,6 @@ func main() {
 		if err != nil {
 			return mcp.NewToolResultError(err.Error()), nil
 		}
-		args := req.GetStringSlice("args", []string{})
 		// 读取 env
 		envMap := map[string]string{}
 		if all := req.GetArguments(); all != nil {
@@ -78,7 +73,6 @@ func main() {
 
 		id := mgr.Submit(executor.SubmitOptions{
 			Command: cmd,
-			Args:    args,
 			Env:     envMap,
 			Dir:     dir,
 			Shell:   shell,

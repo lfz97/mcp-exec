@@ -26,7 +26,6 @@ const (
 // 提交选项
 type SubmitOptions struct {
 	Command string
-	Args    []string
 	Env     map[string]string
 	Dir     string
 	Shell   string // bash 或 powershell
@@ -320,9 +319,6 @@ func buildCmd(opts SubmitOptions) *exec.Cmd {
 	if shell == "bash" {
 		return exec.Command("bash", "-lc", opts.Command)
 	}
-	// 兜底：直接执行可执行文件+args
-	if len(opts.Args) > 0 {
-		return exec.Command(opts.Command, opts.Args...)
-	}
+	// 兜底：直接执行命令
 	return exec.Command(opts.Command)
 }
